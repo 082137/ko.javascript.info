@@ -1,21 +1,21 @@
-# Shadow DOM styling
+# Shadow DOM 스타일링
 
-Shadow DOM may include both `<style>` and `<link rel="stylesheet" href="…">` tags. In the latter case, stylesheets are HTTP-cached, so they are not redownloaded for multiple components that use same template.
+Shadow DOM에는 `<style>` 태그와 `<link rel="stylesheet" href="…">` 태그가 모두 포함될 수 있습니다. 후자의 경우, 스타일시트는 HTTP 캐시가 적용되어 동일한 템플릿을 사용하는 여러 구성 요소에 대해 다시 다운로드되지 않습니다.
 
-As a general rule, local styles work only inside the shadow tree, and document styles work outside of it. But there are few exceptions.
+일반적으로 로컬 스타일은 shadow 트리 내부에서만 작동하고, 문서 스타일은 그 외부에서 작동합니다. 하지만 몇 가지 예외가 있습니다.
 
 ## :host
 
-The `:host` selector allows to select the shadow host (the element containing the shadow tree).
+`:host` 선택자는 shadow 호스트(Shadow 트리를 포함하는 요소)를 선택할 수 있게 해줍니다.
 
-For instance, we're making `<custom-dialog>` element that should be centered. For that we need to style the `<custom-dialog>` element itself.
+예를 들어, 중앙에 배치되어야 하는 `<custom-dialog>` 요소를 만든다고 가정해봅시다. 이를 위해 `<custom-dialog>` 요소 자체를 스타일링해야 합니다.
 
-That's exactly what `:host` does:
+바로 그것이 `:host`가 하는 일입니다.
 
 ```html run autorun="no-epub" untrusted height=80
 <template id="tmpl">
   <style>
-    /* the style will be applied from inside to the custom-dialog element */
+    /* 스타일은 내부에서 custom-dialog 요소로 적용됩니다. */
     :host {
       position: fixed;
       left: 50%;
@@ -38,17 +38,17 @@ customElements.define('custom-dialog', class extends HTMLElement {
 </script>
 
 <custom-dialog>
-  Hello!
+  안녕하세요!
 </custom-dialog>
 ```
 
 ## Cascading
 
-The shadow host (`<custom-dialog>` itself) resides in the light DOM, so it's affected by document CSS rules.
+Shadow 호스트(`<custom-dialog>` 자체)는 light DOM에 존재하므로 문서 CSS 규칙의 영향을 받습니다.
 
-If there's a property styled both in `:host` locally, and in the document, then the document style takes precedence.
+만약 어떤 속성이 로컬에서 `:host`로 스타일링되고 문서에서도 스타일링되었다면, 문서 스타일이 우선권을 가집니다.
 
-For instance, if in the document we had:
+예를 들어, 문서에 다음과 같은 스타일이 있을 경우:
 ```html
 <style>
 custom-dialog {
@@ -56,18 +56,18 @@ custom-dialog {
 }
 </style>
 ```
-...Then the `<custom-dialog>` would be without padding.
+...그렇다면 `<custom-dialog>`에는 패딩이 없게 됩니다.
 
-It's very convenient, as we can setup "default" component styles in its `:host` rule, and then easily override them in the document.
+이는 매우 편리한데, `:host` 규칙에서 "기본" 구성 요소 스타일을 설정하고, 문서에서 쉽게 이를 재정의할 수 있기 때문입니다.
 
-The exception is when a local property is labelled `!important`, for such properties, local styles take precedence.
+예외는 로컬 속성이 `!important`로 지정된 경우입니다. 이러한 속성에 대해서는 로컬 스타일이 우선권을 가집니다.
 
 
 ## :host(selector)
 
-Same as `:host`, but applied only if the shadow host matches the `selector`.
+ `:host`와 같지만, shadow 호스트가 `selector`와 일치할 때에만 적용됩니다.
 
-For example, we'd like to center the `<custom-dialog>` only if it has `centered` attribute:
+예를 들어, `centered` 속성이 있는 경우에만 `<custom-dialog>`을 가운데 정렬하고 싶다면:
 
 ```html run autorun="no-epub" untrusted height=80
 <template id="tmpl">
@@ -101,15 +101,15 @@ customElements.define('custom-dialog', class extends HTMLElement {
 
 
 <custom-dialog centered>
-  Centered!
+  가운데 정렬된 경우입니다!
 </custom-dialog>
 
 <custom-dialog>
-  Not centered.
+  가운데 정렬되지 않은 경우입니다!
 </custom-dialog>
 ```
 
-Now the additional centering styles are only applied to the first dialog: `<custom-dialog centered>`.
+이제 추가된 가운데 정렬 스타일은 첫 번째 대화 상자인 `<custom-dialog centered>`에만 적용됩니다.
 
 ## :host-context(selector)
 
