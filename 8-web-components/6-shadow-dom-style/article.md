@@ -113,9 +113,9 @@ customElements.define('custom-dialog', class extends HTMLElement {
 
 ## :host-context(selector)
 
-Same as `:host`, but applied only if the shadow host or any of its ancestors in the outer document matches the `selector`.
+`:host`와 유사하지만, shadow 호스트나 그 외부 문서의 조상 요소 중 하나가 `selector`와 일치할 때에만 적용됩니다.
 
-E.g. `:host-context(.dark-theme)` matches only if there's `dark-theme` class on `<custom-dialog>` on anywhere above it:
+예를 들어, `:host-context(.dark-theme)`은 `<custom-dialog>` 또는 그 상위의 어느 곳이라도 `dark-theme` 클래스가 있는 경우에만 일치합니다:
 
 ```html
 <body class="dark-theme">
@@ -126,15 +126,15 @@ E.g. `:host-context(.dark-theme)` matches only if there's `dark-theme` class on 
 </body>
 ```
 
-To summarize, we can use `:host`-family of selectors to style the main element of the component, depending on the context. These styles (unless `!important`) can be overridden by the document.
+요약하면,  `:host` 계열 선택자를 사용하여 컴포넌트의 주요 요소를 문맥에 따라 스타일링할 수 있습니다. 이러한 스타일들은 (`!important`로 지정하지 않는 한) 문서에서 재정의할 수 있습니다.
 
 ## Styling slotted content
 
-Now let's consider the situation with slots.
+이제 슬롯을 고려해 보겠습니다.
 
-Slotted elements come from light DOM, so they use document styles. Local styles do not affect slotted content.
+슬롯된 요소들은 light DOM에서 가져오기 때문에 문서 스타일을 사용합니다. 로컬 스타일은 슬롯된 콘텐츠에 영향을 주지 않습니다.
 
-In the example below, slotted `<span>` is bold, as per document style, but does not take `background` from the local style:
+아래 예시에서는 슬롯된 `<span>`이 문서 스타일에 따라 굵게 표시되지만, 로컬 스타일에서 `배경색`은 적용되지 않습니다:
 ```html run autorun="no-epub" untrusted height=80
 <style>
 *!*
@@ -163,11 +163,11 @@ customElements.define('user-card', class extends HTMLElement {
 </script>
 ```
 
-The result is bold, but not red.
+결과는 굵게 표시되지만 빨간색으로는 표시되지 않습니다.
 
-If we'd like to style slotted elements in our component, there are two choices.
+컴포넌트 내의 슬롯된 요소를 스타일링하려면 두 가지 선택지가 있습니다.
 
-First, we can style the `<slot>` itself and rely on CSS inheritance:
+첫째, `<slot>` 자체를 스타일링하고 CSS 상속을 의존할 수 있습니다:
 
 ```html run autorun="no-epub" untrusted height=80
 <user-card>
@@ -191,12 +191,12 @@ customElements.define('user-card', class extends HTMLElement {
 </script>
 ```
 
-Here `<p>John Smith</p>` becomes bold, because CSS inheritance is in effect between the `<slot>` and its contents. But in CSS itself not all properties are inherited.
+여기서 `<p>John Smith</p>`는 굵게 표시됩니다. 이는 `<slot>`과 그 내용물 사이에 CSS 상속이 적용되기 때문입니다. 그러나 CSS 자체에서 모든 속성이 상속되는 것은 아닙니다.
 
-Another option is to use `::slotted(selector)` pseudo-class. It matches elements based on two conditions:
+또 다른 옵션은 `::slotted(selector)` 가상 클래스를 사용하는 것입니다. 이는 두 가지 조건을 기반으로 요소를 선택합니다:
 
-1. That's a slotted element, that comes from the light DOM. Slot name doesn't matter. Just any slotted element, but only the element itself, not its children.
-2. The element matches the `selector`.
+1. 라이트 DOM에서 슬롯된 요소여야 합니다. 슬롯 이름은 중요하지 않습니다. 단순히 어떤 슬롯된 요소든 가능하지만, 해당 요소 자체에만 적용되며 그 자식 요소는 포함되지 않습니다.
+2. `selector`와 일치해야 합니다.
 
 In our example, `::slotted(div)` selects exactly `<div slot="username">`, but not its children:
 
